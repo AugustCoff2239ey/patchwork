@@ -59,6 +59,12 @@ func TestSaveAndLoad_RoundTrip(t *testing.T) {
 	if len(loaded.Snapshot.Values) != len(original.Snapshot.Values) {
 		t.Errorf("values length mismatch: got %d, want %d", len(loaded.Snapshot.Values), len(original.Snapshot.Values))
 	}
+	// Verify individual values survived the round-trip.
+	for k, want := range original.Snapshot.Values {
+		if got := loaded.Snapshot.Values[k]; got != want {
+			t.Errorf("value mismatch for key %q: got %q, want %q", k, got, want)
+		}
+	}
 }
 
 func TestLoad_MissingFile(t *testing.T) {
