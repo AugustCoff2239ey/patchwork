@@ -65,6 +65,15 @@ func FindByTag(tags TagMap, tag string) []string {
 	return result
 }
 
+// List returns all tags associated with a snapshot ID, or nil if the snapshot
+// has no tags or is not present in the map.
+func List(tags TagMap, snapshotID string) []string {
+	if tags == nil {
+		return nil
+	}
+	return tags[snapshotID]
+}
+
 // Save writes the TagMap to a JSON file at the given path.
 func Save(path string, tags TagMap) error {
 	data, err := json.MarshalIndent(tags, "", "  ")
