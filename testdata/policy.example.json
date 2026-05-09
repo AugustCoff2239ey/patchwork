@@ -1,0 +1,23 @@
+{
+  "rules": [
+    {
+      "name": "prod-change-limit",
+      "environments": ["prod"],
+      "max_changes": 5
+    },
+    {
+      "name": "no-secret-drift",
+      "forbid_keys": ["SECRET", "PASSWORD", "TOKEN"],
+      "environments": ["prod", "staging"]
+    },
+    {
+      "name": "require-version-bump",
+      "require_keys": ["VERSION"],
+      "environments": ["prod"]
+    },
+    {
+      "name": "global-key-guard",
+      "forbid_keys": ["AWS_SECRET_ACCESS_KEY"]
+    }
+  ]
+}
