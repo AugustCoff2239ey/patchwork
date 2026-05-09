@@ -54,3 +54,22 @@ func Environments(entries []history.Entry) []string {
 	}
 	return envs
 }
+
+// Count returns the number of entries that would be returned by Apply with
+// the given options, without allocating a result slice.
+func Count(entries []history.Entry, opts Options) int {
+	n := 0
+	for _, e := range entries {
+		if opts.Environment != "" && !strings.EqualFold(e.Environment, opts.Environment) {
+			continue
+		}
+		if opts.Since != "" && !strings.HasPrefix(e.Timestamp, opts.Since) {
+			continue
+		}
+		if opts.HasChanges && e.ChangeCount == 0 {
+			continue
+		}
+		n++
+	}
+	return n
+}
