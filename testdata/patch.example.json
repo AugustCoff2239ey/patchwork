@@ -1,0 +1,16 @@
+[
+  {
+    "action": "set",
+    "key": "LOG_LEVEL",
+    "value": "warn"
+  },
+  {
+    "action": "delete",
+    "key": "DEBUG"
+  },
+  {
+    "action": "rename",
+    "key": "DB_HOST",
+    "new_key": "DATABASE_HOST"
+  }
+]
