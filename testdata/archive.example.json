@@ -1,0 +1,18 @@
+{
+  "entries": [
+    {
+      "id": "a1b2c3d4",
+      "environment": "prod",
+      "archived_at": "2024-06-01T10:00:00Z",
+      "snapshot_ref": "/var/patchwork/snapshots/prod-20240601.json",
+      "note": "3 change(s)"
+    },
+    {
+      "id": "e5f6a7b8",
+      "environment": "staging",
+      "archived_at": "2024-06-02T09:30:00Z",
+      "snapshot_ref": "/var/patchwork/snapshots/staging-20240602.json",
+      "note": "1 change(s)"
+    }
+  ]
+}
