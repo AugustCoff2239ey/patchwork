@@ -1,0 +1,32 @@
+{
+  "events": [
+    {
+      "timestamp": "2024-01-15T09:00:00Z",
+      "kind": "capture",
+      "environment": "production",
+      "message": "captured /etc/app/config.env",
+      "user": "alice"
+    },
+    {
+      "timestamp": "2024-01-15T09:05:00Z",
+      "kind": "diff",
+      "environment": "production",
+      "message": "compared snapshots: 3 changes detected",
+      "user": "alice"
+    },
+    {
+      "timestamp": "2024-01-16T14:30:00Z",
+      "kind": "baseline",
+      "environment": "staging",
+      "message": "pinned baseline for staging",
+      "user": "bob"
+    },
+    {
+      "timestamp": "2024-01-17T08:00:00Z",
+      "kind": "rollback",
+      "environment": "production",
+      "message": "applied rollback plan from entry idx=2",
+      "user": "alice"
+    }
+  ]
+}
