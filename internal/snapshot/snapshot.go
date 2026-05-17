@@ -7,54 +7,51 @@ import (
 	"time"
 )
 
-// Snapshot represents a point-in-time capture of configuration entries.
+// Snapshot holds a point-in-time capture of a configuration file.
 type Snapshot struct {
-	Timestamp time.Time         `json:"timestamp"`
-	Source    string            `json:"source"`
-	Entries   map[string]string `json:"entries"`
+	Environment string            `json:"environment"`
+	Timestamp   time.Time         `json:"timestamp"`
+	Data        map[string]string `json:"data"`
 }
 
-// Capture reads a config file at the given path and returns a Snapshot.
-func Capture(path string) (*Snapshot, error) {
-	data, err := os.ReadFile(path)
+// Capture reads a JSON config file and returns a Snapshot.
+func Capture(path, environment string) (Snapshot, error) {
+	b, err := os.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("capture: reading file %q: %w", path, err)
+		return Snapshot{}, fmt.Errorf("snapshot: read %s: %w", path, err)
 	}
-
-	entries := make(map[string]string)
-	if err := json.Unmarshal(data, &entries); err != nil {
-		return nil, fmt.Errorf("capture: parsing file %q: %w", path, err)
+	var data map[string]string
+	if err := json.Unmarshal(b, &data); err != nil {
+		return Snapshot{}, fmt.Errorf("snapshot: parse %s: %w", path, err)
 	}
-
-	return &Snapshot{
-		Timestamp: time.Now().UTC(),
-		Source:    path,
-		Entries:   entries,
+	return Snapshot{
+		Environment: environment,
+		Timestamp:   time.Now().UTC(),
+		Data:        data,
 	}, nil
 }
 
-// Save writes a snapshot to the given path as JSON.
-func Save(s *Snapshot, path string) error {
-	data, err := json.MarshalIndent(s, "", "  ")
+// Save writes a Snapshot to disk as JSON.
+func Save(path string, s Snapshot) error {
+	b, err := json.MarshalIndent(s, "", "  ")
 	if err != nil {
-		return fmt.Errorf("save: marshalling snapshot: %w", err)
+		return fmt.Errorf("snapshot: marshal: %w", err)
 	}
-	if err := os.WriteFile(path, data, 0o644); err != nil {
-		return fmt.Errorf("save: writing file %q: %w", path, err)
+	if err := os.WriteFile(path, b, 0o644); err != nil {
+		return fmt.Errorf("snapshot: write %s: %w", path, err)
 	}
 	return nil
 }
 
-// Load reads a previously saved snapshot from disk.
-func Load(path string) (*Snapshot, error) {
-	data, err := os.ReadFile(path)
+// Load reads a Snapshot from a JSON file on disk.
+func Load(path string) (Snapshot, error) {
+	b, err := os.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("load: reading file %q: %w", path, err)
+		return Snapshot{}, fmt.Errorf("snapshot: read %s: %w", path, err)
 	}
-
 	var s Snapshot
-	if err := json.Unmarshal(data, &s); err != nil {
-		return nil, fmt.Errorf("load: parsing snapshot %q: %w", path, err)
+	if err := json.Unmarshal(b, &s); err != nil {
+		return Snapshot{}, fmt.Errorf("snapshot: unmarshal: %w", err)
 	}
-	return &s, nil
+	return s, nil
 }
